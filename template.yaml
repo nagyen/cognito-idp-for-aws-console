@@ -1,0 +1,39 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: AWS::Serverless-2016-10-31
+Description: >
+  congito-idp-for-aws-console
+
+  Sample SAM Template for congito-idp-for-aws-console
+  
+# More info about Globals: https://github.com/awslabs/serverless-application-model/blob/master/docs/globals.rst
+Globals:
+  Function:
+    Timeout: 5
+
+Resources:
+  AWSConsoleLoginFunction:
+    Type: AWS::Serverless::Function # More info about Function Resource: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlessfunction
+    Properties:
+      CodeUri: dist/login/
+      Handler: lambda.handler
+      Runtime: nodejs12.x
+      Events:
+        AWSConsoleLoginApi:
+          Type: HttpApi # More info about API Event Source: https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlesshttpapi
+          Properties:
+            Path: /federate
+            Method: GET
+
+Outputs:
+  # ServerlessHttpApi is an implicit API created out of Events key under Serverless::Function
+  # Find out more about other implicit resources you can reference within SAM
+  # https://github.com/awslabs/serverless-application-model/blob/master/versions/2016-10-31.md#awsserverlesshttpapi
+  AWSConsoleLoginApi:
+    Description: "API Gateway endpoint URL for $default stage for AWSConsoleLoginFunction"
+    Value: !Sub "https://${ServerlessHttpApi}.execute-api.${AWS::Region}.amazonaws.com/awsconsole/federate"
+  AWSConsoleLoginFunction:
+    Description: "AWS console login function ARN"
+    Value: !GetAtt AWSConsoleLoginFunction.Arn
+  AWSConsoleLoginFunctionIamRole:
+    Description: "Implicit IAM Role created for AWS console login function"
+    Value: !GetAtt AWSConsoleLoginFunctionRole.Arn

@@ -1,0 +1,27 @@
+{
+  "name": "congito-idp-for-aws-console",
+  "version": "1.0.0",
+  "description": "sample app to use cognito as idp for aws console",
+  "main": "lambda.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "tsc && node dist/login/lambda.js",
+    "predeploy": "tsc && cp package.json dist/login/package.json && npm i --prefix dist/login --only=prod --no-package-lock",
+    "deploy": "sam package --s3-bucket nag-deployments --s3-prefix lambda/cognito-idp-for-aws-console --output-template-file packaged.yml",
+    "postdeploy": "sam deploy --template-file packaged.yml --stack-name cognito-idp-for-aws-console --capabilities CAPABILITY_IAM"
+  },
+  "author": "Nagarjuna Yendluri",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/aws-lambda": "^8.10.40",
+    "@types/jsonwebtoken": "^8.3.7",
+    "@types/node": "^13.7.0",
+    "tslint": "^6.0.0",
+    "typescript": "^3.7.5"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.614.0",
+    "axios": "^0.19.2",
+    "jsonwebtoken": "^8.5.1"
+  }
+}
